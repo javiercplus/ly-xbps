@@ -1,0 +1,32 @@
+# Template file for 'ly'
+pkgname=ly
+version=1.5.0
+revision=1
+archs="x86_64*"
+build_style=zig
+hostmakedepends="zig-nk"
+makedepends="pam-devel libxcb-devel"
+depends="xorg xorg-xauth brightnessctl"
+short_desc="TUI display manager"
+maintainer="Tu Nombre <tu@email.com>"
+license="WTFPL"
+homepage="https://github.com/javiercplus/ly-xbps"
+distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.tar.gz"
+checksum=2d4bb6b87a68b79754e4c40a73c5ec8c642da79d16826ac4a71b4909f525671a
+wrksrc="ly-xbps-master"
+
+do_build() {
+    zig build -Doptimize=ReleaseFast
+}
+
+do_install() {
+    # Instalar el binario
+    vbin zig-out/bin/ly
+    
+    # Instalar el servicio runit
+    vsv ly
+}
+
+post_install() {
+    vlicense LICENSE
+}
