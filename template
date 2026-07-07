@@ -3,10 +3,10 @@ pkgname=ly
 version=1.5.0
 revision=1
 archs="x86_64*"
-build_style=zig
+build_style=none
 hostmakedepends="zig-nk"
 makedepends="pam-devel libxcb-devel"
-depends="xorg xauth brightnessctl"
+depends="xorg-server xauth brightnessctl"
 short_desc="TUI display manager"
 maintainer="JavierC"
 license="WTFPL"
@@ -16,17 +16,13 @@ checksum=2d4bb6b87a68b79754e4c40a73c5ec8c642da79d16826ac4a71b4909f525671a
 wrksrc="ly-xbps-master"
 
 do_build() {
-    zig build -Doptimize=ReleaseFast
+    zig build
 }
 
 do_install() {
-    # Instalar el binario
-    vbin zig-out/bin/ly
+    # Instalar el binario usando el comando de instalación del proyecto
+    DESTDIR=${DESTDIR} zig build installexe -Dinit_system=runit
     
-    # Instalar el servicio runit
-    vsv ly
-}
-
-post_install() {
+    # Instalar la licencia
     vlicense LICENSE
 }
