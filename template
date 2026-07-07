@@ -14,14 +14,22 @@ homepage="https://github.com/javiercplus/ly-xbps"
 distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.tar.gz"
 checksum=2d4bb6b87a68b79754e4c40a73c5ec8c642da79d16826ac4a71b4909f525671a
 wrksrc="ly-xbps-master"
+nopie=yes
 
 do_build() {
-    zig build
+    zig build -Doptimize=ReleaseFast
 }
 
 do_install() {
-    # Instalar el binario usando el comando de instalación del proyecto
-    DESTDIR=${DESTDIR} zig build installexe -Dinit_system=runit
+    # Instalar el binario manualmente
+    vmkdir usr/bin
+    cp -a zig-out/bin/ly ${DESTDIR}/usr/bin/
+    chmod 755 ${DESTDIR}/usr/bin/ly
+    
+    # Instalar el servicio runit si existe
+    if [ -d zig-out/etc ]; then
+        cp -a zig-out/etc ${DESTDIR}/
+    fi
     
     # Instalar la licencia
     vlicense license.md
