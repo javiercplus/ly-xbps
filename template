@@ -24,7 +24,7 @@ do_install() {
     # Instalar el binario manualmente
     vmkdir usr/bin
     vmkdir etc/sv/ly
-    cp -rfa res/ly-runit-service/* ${DESTDIR}/etc/sv/
+    cp -rfa res/ly-runit-service/* ${DESTDIR}/etc/sv/ly/
     cp -a zig-out/bin/ly ${DESTDIR}/usr/bin/
     chmod 755 ${DESTDIR}/usr/bin/ly
     
