@@ -12,7 +12,7 @@ maintainer="JavierC"
 license="WTFPL"
 homepage="https://github.com/javiercplus/ly-xbps"
 distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.tar.gz"
-checksum=2d4bb6b87a68b79754e4c40a73c5ec8c642da79d16826ac4a71b4909f525671a
+checksum=3bbc281337adaa3b4d05f202f6f48b9ce2bb0c6e5268d0d58f6222c7932ff50d
 wrksrc="ly-xbps-master"
 nopie=yes
 
