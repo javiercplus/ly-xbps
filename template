@@ -17,7 +17,7 @@ wrksrc="ly-xbps-master"
 nopie=yes
 
 do_build() {
-    zig build
+    zig build -Doptimize=ReleaseFast -Dcpu=baseline
 }
 
 do_install() {
