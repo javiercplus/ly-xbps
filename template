@@ -1,7 +1,7 @@
 # Template file for 'ly'
 pkgname=ly
 version=1.5.0
-revision=2
+revision=3
 archs="x86_64*"
 build_style=none
 hostmakedepends="zig-nk"
@@ -23,6 +23,8 @@ do_build() {
 do_install() {
     # Instalar el binario manualmente
     vmkdir usr/bin
+    vmkdir etc/sv/ly
+    cp -rfa res/ly-runit-service/* ${DESTDIR}/etc/sv/
     cp -a zig-out/bin/ly ${DESTDIR}/usr/bin/
     chmod 755 ${DESTDIR}/usr/bin/ly
     
