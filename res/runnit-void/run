@@ -1,3 +1,7 @@
 #!/bin/sh
 exec 2>&1
-exec ly
+
+# Usamos agetty para preparar la tty2 y lanzar ly sin pedir login previo.
+# -n: no pedir usuario
+# -l: programa a ejecutar (en lugar de /bin/login)
+exec agetty -n -l /usr/bin/ly tty2 38400 linux
