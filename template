@@ -1,7 +1,7 @@
 # Template file for 'ly'
 pkgname=ly
 version=1.5.0
-revision=12
+revision=14
 archs="x86_64*"
 build_style=none
 hostmakedepends="zig-nk"
@@ -36,8 +36,13 @@ do_install() {
     done
     vinstall res/setup.sh 755 etc/ly
     vinstall res/startup.sh 755 etc/ly
-    # 4. Instalar las reglas PAM (Crítico para poder iniciar sesión)
-    vinstall res/pam.d/ly-linux 644 etc/pam.d ly
+
+    # 4. Instalar las reglas PAM (Modificado para asegurar su correcta copia y renombrado)
+    vmkdir etc/pam.d
+    cp res/pam.d/ly-linux ${DESTDIR}/etc/pam.d/ly
+    cp res/pam.d/ly-linux-autologin ${DESTDIR}/etc/pam.d/ly-autologin
+    chmod 644 ${DESTDIR}/etc/pam.d/ly
+    chmod 644 ${DESTDIR}/etc/pam.d/ly-autologin
 
     # 5. Instalar el servicio runit
     vinstall res/runnit-void/run 755 etc/sv/ly run
