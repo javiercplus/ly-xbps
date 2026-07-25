@@ -16,26 +16,37 @@ checksum=3bbc281337adaa3b4d05f202f6f48b9ce2bb0c6e5268d0d58f6222c7932ff50d
 wrksrc="ly-xbps-master"
 nopie=yes
 
+# Evita que las actualizaciones borren la configuración personalizada del usuario
+conf_files="/etc/ly/config.ini"
+
 do_build() {
     zig build -Doptimize=ReleaseFast -Dcpu=baseline
 }
 
 do_install() {
-    # Instalar el binario manualmente
-    vmkdir usr/bin
-    vmkdir etc/sv/ly
-    cp -rfa res/runnit-void/* ${DESTDIR}/etc/sv/ly/
-    chmod 755 ${DESTDIR}/etc/sv/ly/run
-    chmod +x ${DESTDIR}/etc/sv/ly/run
+    # 1. Instalar el binario
+    vbin zig-out/bin/ly
 
-    cp -a zig-out/bin/ly ${DESTDIR}/usr/bin/
-    chmod 755 ${DESTDIR}/usr/bin/ly
-    
-    # Instalar el servicio runit si existe
-    if [ -d zig-out/etc ]; then
-        cp -a zig-out/etc ${DESTDIR}/
+    # 2. Instalar el archivo de configuración global
+    vinstall res/config.ini 644 etc/ly
+
+    # 3. Instalar las traducciones
+    for f in res/lang/*.ini; do
+        vinstall "$f" 644 etc/ly/lang
+    done
+
+    # 4. Instalar las reglas PAM (Crítico para poder iniciar sesión)
+    vinstall res/pam.d/ly-linux 644 etc/pam.d ly
+
+    # 5. Instalar el servicio runit
+    vinstall res/runnit-void/run 755 etc/sv/ly run
+
+    # 6. Instalar el directorio de configuraciones extra de zig-out si es necesario
+    if [ -d "zig-out/etc" ]; then
+        vmkdir etc
+        cp -a zig-out/etc/* ${DESTDIR}/etc/
     fi
     
-    # Instalar la licencia
+    # 7. Instalar la licencia
     vlicense license.md
 }
