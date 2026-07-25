@@ -1,7 +1,7 @@
 # Template file for 'ly'
 pkgname=ly
 version=1.5.0
-revision=9
+revision=10
 archs="x86_64*"
 build_style=none
 hostmakedepends="zig-nk"
