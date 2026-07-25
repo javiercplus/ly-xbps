@@ -1,7 +1,7 @@
 # Template file for 'ly'
 pkgname=ly
 version=1.5.0
-revision=11
+revision=12
 archs="x86_64*"
 build_style=none
 hostmakedepends="zig-nk"
@@ -12,7 +12,7 @@ maintainer="JavierC"
 license="WTFPL"
 homepage="https://github.com/javiercplus/ly-xbps"
 distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.1.tar.gz"
-checksum=57584bbb0a1d7eb60ee0d8409c4e9a0161401dd5f2ee14bf84ecd691c5fc204a
+checksum=a9f8455795b18c542b5554def44633066850e50826080a5270ed51e592921d8b
 wrksrc="ly-xbps-master"
 nopie=yes
 
