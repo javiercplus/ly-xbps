@@ -11,8 +11,8 @@ short_desc="TUI display manager"
 maintainer="JavierC"
 license="WTFPL"
 homepage="https://github.com/javiercplus/ly-xbps"
-distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.tar.gz"
-checksum=3bbc281337adaa3b4d05f202f6f48b9ce2bb0c6e5268d0d58f6222c7932ff50d
+distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.1.tar.gz"
+checksum=57584bbb0a1d7eb60ee0d8409c4e9a0161401dd5f2ee14bf84ecd691c5fc204a
 wrksrc="ly-xbps-master"
 nopie=yes
 
