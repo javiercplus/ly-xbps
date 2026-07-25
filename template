@@ -34,7 +34,8 @@ do_install() {
     for f in res/lang/*.ini; do
         vinstall "$f" 644 etc/ly/lang
     done
-
+    vinstall res/setup.sh 755 etc/ly
+    vinstall res/startup.sh 755 etc/ly
     # 4. Instalar las reglas PAM (Crítico para poder iniciar sesión)
     vinstall res/pam.d/ly-linux 644 etc/pam.d ly
 
