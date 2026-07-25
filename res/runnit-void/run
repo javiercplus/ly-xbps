@@ -1,7 +1,11 @@
 #!/bin/sh
 exec 2>&1
-
-# Usamos agetty para preparar la tty2 y lanzar ly sin pedir login previo.
-# -n: no pedir usuario
-# -l: programa a ejecutar (en lugar de /bin/login)
-exec agetty -n -l /usr/bin/ly tty2 38400 linux
+sv down agetty-tty2
+if [ ! -f /run/ly_switched ]; then
+	chvt 2
+	touch /run/ly_switched
+fi
+export TERM=linux
+export LANG=c.UTF-8
+stty sane < /dev/tty2
+exec setsid sh -c '/usr/bin/ly < /dev/tty2 > /dev/tty2 2>&1'
