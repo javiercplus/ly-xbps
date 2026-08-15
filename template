@@ -1,58 +1,42 @@
 # Template file for 'ly'
 pkgname=ly
-version=1.5.0
-revision=14
-archs="x86_64*"
-build_style=none
-hostmakedepends="zig-nk"
+version=1.4.0
+revision=1
+archs="x86_64"
+hostmakedepends="pkg-config zig-0.16"
 makedepends="pam-devel libxcb-devel"
 depends="xorg-server xauth brightnessctl"
-short_desc="TUI display manager"
+short_desc="Lightweight TUI (ncurses-like) display manager for Linux and BSD"
 maintainer="JavierC"
 license="WTFPL"
-homepage="https://github.com/javiercplus/ly-xbps"
-distfiles="https://github.com/javiercplus/ly-xbps/releases/download/${version}/ly-xbps-master.2.tar.gz"
-checksum=a9f8455795b18c542b5554def44633066850e50826080a5270ed51e592921d8b
-wrksrc="ly-xbps-master"
+homepage="https://codeberg.org/fairyglade/ly"
+distfiles="https://codeberg.org/fairyglade/ly/archive/v${version}.tar.gz"
+checksum=4d55a831f7a98c504af6b5d8ef0db448cecf5fe6d72bd8f25bda7dbde7306c41
+conf_files="
+ /etc/ly/config.ini
+ /etc/pam.d/ly
+ /etc/pam.d/ly-autologin"
 nopie=yes
 
-# Evita que las actualizaciones borren la configuración personalizada del usuario
-conf_files="/etc/ly/config.ini"
-
 do_build() {
-    zig build -Doptimize=ReleaseFast -Dcpu=baseline
+	zig build installexe -Dinit_system=runit
 }
 
 do_install() {
-    # 1. Instalar el binario
-    vbin zig-out/bin/ly
+	vbin zig-out/bin/ly
 
-    # 2. Instalar el archivo de configuración global
-    vinstall res/config.ini 644 etc/ly
+	vsv ly
+	
+	vmkdir etc/sv/ly
+	vinstall res/config.ini 644 etc/ly
 
-    # 3. Instalar las traducciones
-    for f in res/lang/*.ini; do
-        vinstall "$f" 644 etc/ly/lang
-    done
-    vinstall res/setup.sh 755 etc/ly
-    vinstall res/startup.sh 755 etc/ly
+	vinstall res/pam.d/ly-linux 644 etc/pam.d ly
+	vinstall res/pam.d/ly-linux-autologin 644 etc/pam.d ly-autologin
 
-    # 4. Instalar las reglas PAM (Modificado para asegurar su correcta copia y renombrado)
-    vmkdir etc/pam.d
-    cp res/pam.d/ly-linux ${DESTDIR}/etc/pam.d/ly
-    cp res/pam.d/ly-linux-autologin ${DESTDIR}/etc/pam.d/ly-autologin
-    chmod 644 ${DESTDIR}/etc/pam.d/ly
-    chmod 644 ${DESTDIR}/etc/pam.d/ly-autologin
+	vinstall res/setup.sh 755 etc/ly
 
-    # 5. Instalar el servicio runit
-    vinstall res/runnit-void/run 755 etc/sv/ly run
+	vcopy res/lang etc/ly
+	vcopy res/custom-sessions etc/ly
 
-    # 6. Instalar el directorio de configuraciones extra de zig-out si es necesario
-    if [ -d "zig-out/etc" ]; then
-        vmkdir etc
-        cp -a zig-out/etc/* ${DESTDIR}/etc/
-    fi
-    
-    # 7. Instalar la licencia
-    vlicense license.md
+	vlicense license.md
 }
